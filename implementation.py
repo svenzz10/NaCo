@@ -28,7 +28,7 @@ class RandomSearch(Algorithm):
     '''An example of Random Search.'''
 
     def __call__(self, problem: ioh.problem.Integer) -> None:
-        self.y_best: float = float("inf")
+        self.y_best: float = float("-inf")
         for iteration in range(self.max_iterations):
             # Generate a random bit string
             x: list[int] = [random.randint(0, 1) for _ in range(problem.meta_data.n_variables)]
@@ -36,13 +36,86 @@ class RandomSearch(Algorithm):
             y: float = problem(x)
             # update the current state
             self.y_best = max(self.y_best, y)
-           
+            
             
 class GeneticAlgorithm(Algorithm):
     '''A skeleton (minimal) implementation of your Genetic Algorithm.'''
     
-    def __call__(self, problem: ioh.problem.Integer) -> None:
-        pass
+    
+    
+    def __call__(self, problem: ioh.problem.Integer) -> None: 
+        #parameters for algorithms
+        toBeSelected, populationSize, chanceToFlip = 8, 20, 4
+
+        population = []
+        for x in range(populationSize):
+            population.append([random.randint(0, 1) for _ in range(problem.meta_data.n_variables)])
+        for iteration in range(self.max_iterations):
+            bestOfPopulation = selectionVariant2(population, problem, toBeSelected)
+            nextGen = recombinationVariant1(bestOfPopulation, problem, populationSize)
+            mutationVariant1(nextGen, chanceToFlip)
+            population = nextGen
+            
+    
+#roulette wheel selection
+def selectionVariant1(currentGen, problem, toBeSelected):
+    #parameter for selection
+    bestOfPopulation = []
+    #creates array for fitnessScores
+    totalFitness = 0
+    fitnessArray = []
+    for individual in currentGen:
+        fitnessArray.append(totalFitness)
+        totalFitness += problem(individual)
+        
+    #selects individuasls based on scores
+    for _ in range(toBeSelected):
+        fitnessScore = random.uniform(0, totalFitness)
+        searchIndex = len(currentGen) - 1
+        fitnessSearch = fitnessArray[searchIndex]
+        while fitnessScore <= fitnessSearch and searchIndex >= 1:
+            searchIndex -= 1
+            fitnessSearch = fitnessArray[searchIndex]
+        bestOfPopulation.append(currentGen[searchIndex])
+    return bestOfPopulation
+    
+#Simply select the best (risk local maximum)
+def selectionVariant2(currentGen, problem, toBeSelected):
+    currentGen.sort(key=problem, reverse=True)
+    nextGen = []
+    for i in range(toBeSelected):
+        nextGen.append(currentGen[i])
+    return nextGen
+            
+
+
+def recombinationVariant1(bestOfPopulation, problem, populationSize):
+    nextGen = []
+    for i in range(populationSize):
+        #choosing parents
+        father = bestOfPopulation[random.randint(0, len(bestOfPopulation) - 1)]
+        mother = bestOfPopulation[random.randint(0, len(bestOfPopulation) - 1)]
+        
+        #adding random genes of parents
+        crossover_mask = [random.randint(0, 1) for _ in range(problem.meta_data.n_variables)]
+        child = []
+        index = 0
+        for gene in crossover_mask:
+            if gene == 1:
+                child.append(father[index])
+            else:
+                child.append(mother[index])
+            index += 1
+        #adding child
+        nextGen.append(child)
+    return nextGen
+        
+def mutationVariant1(population, chanceToFlip):
+    for individual in population:
+        chance = random.randint(0, chanceToFlip-1)
+        if chance < 1:
+            chromosomeToFlip = random.randint(0, len(individual)-1)
+            individual[chromosomeToFlip] = not individual[chromosomeToFlip]
     
             
 def main():
@@ -50,10 +123,10 @@ def main():
     random.seed(42)
 
     # Instantiate the algoritm, you should replace this with your GA implementation 
-    algorithm = RandomSearch()
+    algorithm = GeneticAlgorithm()
 
     # Get a problem from the IOHexperimenter environment
-    problem: ioh.problem.Integer = ioh.get_problem(1, 1, 5, "Integer")
+    problem: ioh.problem.Integer = ioh.get_problem(2, 1, 100, "Integer")
 
     # Run the algoritm on the problem
     algorithm(problem)
@@ -63,6 +136,7 @@ def main():
     print("".join(map(str, problem.state.current_best.x)))
     print("With an objective value of:", problem.state.current_best.y)
     print()
+    print("after", problem.state.evaluations)
 
 
 if __name__ == '__main__':
