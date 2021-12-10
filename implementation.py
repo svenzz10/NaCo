@@ -20,6 +20,7 @@ Only use keyword arguments for your __init__ method. This is a requirement for t
 test script to properly evaluate your algoritm.
 '''
 
+from math import perm
 import ioh
 import random
 from algorithm import Algorithm
