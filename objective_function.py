@@ -19,32 +19,31 @@ class CellularAutomata:
         lastPart = bitString[2:len(bitString)]
         if rule_number > 500:
             self.k = 3
-            lastPart = ternary(rule_number)
+            lastPart = self.ternary(rule_number)
         self.rule = lastPart
 
     def __call__(self, c0: typing.List[int], t: int) -> typing.List[int]:
         '''Evaluate for T timesteps. Return Ct for a given C0.'''
-        oldC0 = []
-        newC0 = c0
-        for _ in t:
-            for index in range(len(c0)):
-                oldC0 = []
+        oldC0 = c0
+        for _ in range(t):
+            newC0 = []
+            for index in range(len(oldC0)):
                 prevCell = 0
                 if index != 0:
-                    prevCell = newC0[index-1]
+                    prevCell = oldC0[index-1]
                 nextCell = 0
-                if index != len(newC0) - 1:
-                    nextCell = newC0[index + 1]
-                cellList = [prevCell, index, nextCell]
+                if index != len(oldC0) - 1:
+                    nextCell = oldC0[index + 1]
+                cellList = [prevCell, oldC0[index], nextCell]
                 place = 0
                 for cellIndex in range(len(cellList)):
-                    place += cellList[2 - cellIndex] * (self.k**index)
+                    place += cellList[2 - cellIndex] * (self.k**cellIndex)
                 if place > len(self.rule):
-                    oldC0.append(0)
+                    newC0.append(0)
                 else:
-                    oldC0.append(int(self.rule[len(self.rule)-1-place]))
-                newC0 = oldC0
-        return newC0
+                    newC0.append(int(self.rule[len(self.rule)-1-place]))
+            oldC0 = newC0
+        return oldC0
 
 
 def objective_function(c0_prime: typing.List[int]) -> float:
@@ -118,4 +117,35 @@ def example():
 
 
 if __name__ == '__main__':
-    example()
+    #example()
+    file1 = open('ca_input.csv','r')
+    lines = file1.readlines()
+    inputArray = []
+    for index in range(len(lines)):
+        if index != 0:
+            newInput = []
+            split1 = lines[index].split(",",1)
+            k = int(split1[0])
+            split2 = split1[1].split(",",1)
+            rule = int(split2[0])
+            split3 = split2[1].split(",",1)
+            T = int(split3[0])
+            CT = split3[1]
+            CTArray = []
+            CTSplit = CT.split("[")[1]
+            CTSplit = CTSplit.split("]")[0]
+            CTSplit = CTSplit.split(",")
+            for number in CTSplit:
+                CTArray.append(int(number))
+            newInput.append(k)
+            newInput.append(rule)
+            newInput.append(T)
+            newInput.append(CTArray)
+            inputArray.append(newInput)
+    cellularAutomata = CellularAutomata(inputArray[0][1])
+    print(inputArray[1][3])
+    print(cellularAutomata(inputArray[1][3], inputArray[0][2]))
+    print(bin(inputArray[0][1]))
+    
+    
+    
