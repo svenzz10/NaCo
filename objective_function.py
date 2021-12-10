@@ -48,7 +48,7 @@ def example():
     problem.attach_logger(logger)
 
     # run your algoritm on the problem
-    algorithm(problem)
+    algorithm(3, problem)
 
 
 
