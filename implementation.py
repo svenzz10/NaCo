@@ -20,6 +20,7 @@ Only use keyword arguments for your __init__ method. This is a requirement for t
 test script to properly evaluate your algoritm.
 '''
 
+from math import perm
 import ioh
 import random
 from algorithm import Algorithm
@@ -27,11 +28,12 @@ from algorithm import Algorithm
 class RandomSearch(Algorithm):
     '''An example of Random Search.'''
 
-    def __call__(self, problem: ioh.problem.Integer) -> None:
+    def __call__(self, id, problem: ioh.problem.Integer) -> None:
         self.y_best: float = float("-inf")
         for iteration in range(self.max_iterations):
             # Generate a random bit string
-            x: list[int] = [random.randint(0, 1) for _ in range(problem.meta_data.n_variables)]
+            if id == 2: x: list[int] = [random.randint(0, 1) for _ in range(problem.meta_data.n_variables)]
+            else: x: list[int] = [random.randint(0, 2) for _ in range(problem.meta_data.n_variables)]
             # Call the problem in order to get the y value    
             y: float = problem(x)
             # update the current state
@@ -40,20 +42,22 @@ class RandomSearch(Algorithm):
             
 class GeneticAlgorithm(Algorithm):
     '''A skeleton (minimal) implementation of your Genetic Algorithm.'''
-    
-    
-    
-    def __call__(self, problem: ioh.problem.Integer) -> None: 
+
+    def __call__(self, id, problem: ioh.problem.Integer) -> None: 
         #parameters for algorithms
         toBeSelected, populationSize, chanceToFlip = 8, 20, 4
-
+        print(id)
+    
         population = []
         for x in range(populationSize):
-            population.append([random.randint(0, 1) for _ in range(problem.meta_data.n_variables)])
+            if (id == 2):
+                population.append([random.randint(0, 1) for _ in range(problem.meta_data.n_variables)])
+            else:
+                population.append([random.randint(0, 2) for _ in range(problem.meta_data.n_variables)])
         for iteration in range(self.max_iterations):
             bestOfPopulation = selectionVariant2(population, problem, toBeSelected)
-            nextGen = recombinationVariant1(bestOfPopulation, problem, populationSize)
-            mutationVariant1(nextGen, chanceToFlip)
+            nextGen = recombinationVariant1(id, bestOfPopulation, problem, populationSize)
+            mutationVariant1(id, nextGen, chanceToFlip)
             population = nextGen
             
     
@@ -89,7 +93,7 @@ def selectionVariant2(currentGen, problem, toBeSelected):
             
 
 
-def recombinationVariant1(bestOfPopulation, problem, populationSize):
+def recombinationVariant1(id, bestOfPopulation, problem, populationSize):
     nextGen = []
     for i in range(populationSize):
         #choosing parents
@@ -110,12 +114,19 @@ def recombinationVariant1(bestOfPopulation, problem, populationSize):
         nextGen.append(child)
     return nextGen
         
-def mutationVariant1(population, chanceToFlip):
+def mutationVariant1(id, population, chanceToFlip):
     for individual in population:
         chance = random.randint(0, chanceToFlip-1)
         if chance < 1:
-            chromosomeToFlip = random.randint(0, len(individual)-1)
-            individual[chromosomeToFlip] = not individual[chromosomeToFlip]
+            if (id == 2):
+                chromosomeToFlip = random.randint(0, len(individual)-1)
+                individual[chromosomeToFlip] = not individual[chromosomeToFlip]
+            else:
+                chromosomeToFlip = random.randint(0, len(individual)-1)
+                if (individual[chromosomeToFlip] == 0): individual[chromosomeToFlip] = 1
+                elif (individual[chromosomeToFlip] == 1): individual[chromosomeToFlip] = 2
+                elif (individual[chromosomeToFlip] == 2): individual[chromosomeToFlip] = 0
+
     
     
 def main():
@@ -128,6 +139,7 @@ def main():
     # Get a problem from the IOHexperimenter environment
     problem: ioh.problem.Integer = ioh.get_problem(2, 1, 100, "Integer")
 
+<<<<<<< HEAD
     # # Run the algoritm on the problem
     # algorithm(problem)
 
@@ -141,6 +153,17 @@ def main():
     lastPart = bitstring[2:len(bitstring)]
     print(lastPart)
     
+=======
+    # Run the algoritm on the problem
+    algorithm(3, problem)
+
+    # Inspect the results
+    print("Best solution found:")
+    print("".join(map(str, problem.state.current_best.x)))
+    print("With an objective value of:", problem.state.current_best.y)
+    print()
+    print("after", problem.state.evaluations)
+>>>>>>> 7854344838a2a11435dcf1a67ef8a1500e4fc7b2
 
 
 if __name__ == '__main__':
