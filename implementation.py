@@ -36,7 +36,7 @@ class RandomSearch(Algorithm):
             y: float = problem(x)
             # update the current state
             self.y_best = max(self.y_best, y)
-            
+           
             
 class GeneticAlgorithm(Algorithm):
     '''A skeleton (minimal) implementation of your Genetic Algorithm.'''
