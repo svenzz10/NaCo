@@ -139,23 +139,9 @@ def main():
     # Get a problem from the IOHexperimenter environment
     problem: ioh.problem.Integer = ioh.get_problem(2, 1, 100, "Integer")
 
-<<<<<<< HEAD
-    # # Run the algoritm on the problem
-    # algorithm(problem)
 
-    # # Inspect the results
-    # print("Best solution found:")
-    # print("".join(map(str, problem.state.current_best.x)))
-    # print("With an objective value of:", problem.state.current_best.y)
-    # print()
-    # print("after", problem.state.evaluations)
-    bitstring = bin(126)
-    lastPart = bitstring[2:len(bitstring)]
-    print(lastPart)
-    
-=======
     # Run the algoritm on the problem
-    algorithm(3, problem)
+    algorithm(3,problem)
 
     # Inspect the results
     print("Best solution found:")
@@ -163,7 +149,6 @@ def main():
     print("With an objective value of:", problem.state.current_best.y)
     print()
     print("after", problem.state.evaluations)
->>>>>>> 7854344838a2a11435dcf1a67ef8a1500e4fc7b2
 
 
 if __name__ == '__main__':
