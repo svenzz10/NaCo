@@ -5,14 +5,47 @@ from implementation import RandomSearch
 
 
 class CellularAutomata:
-    '''Skeleton CA, you should implement this.'''
+    def ternary (n):
+        if n == 0:
+            return '0'
+        nums = []
+        while n:
+            n, r = divmod(n, 3)
+            nums.append(str(r))
+        return ''.join(reversed(nums))
     
     def __init__(self, rule_number: int):
-        pass
+        self.k = 2
+        bitString = bin(rule_number)
+        lastPart = bitString[2:len(bitString)]
+        if rule_number > 500:
+            self.k = 3
+            lastPart = ternary(rule_number)
+        self.rule = lastPart
 
     def __call__(self, c0: typing.List[int], t: int) -> typing.List[int]:
         '''Evaluate for T timesteps. Return Ct for a given C0.'''
-        pass
+        oldC0 = []
+        newC0 = c0
+        for _ in t:
+            for index in range(len(c0)):
+                oldC0 = []
+                prevCell = 0
+                if index != 0:
+                    prevCell = newC0[index-1]
+                nextCell = 0
+                if index != len(newC0) - 1:
+                    nextCell = newC0[index + 1]
+                cellList = [prevCell, index, nextCell]
+                place = 0
+                for cellIndex in range(len(cellList)):
+                    place += cellList[2 - cellIndex] * (self.k**index)
+                if place > len(self.rule):
+                    oldC0.append(0)
+                else:
+                    oldC0.append(int(self.rule[len(self.rule)-1-place]))
+                newC0 = oldC0
+        return newC0
 
 
 def objective_function(c0_prime: typing.List[int]) -> float:

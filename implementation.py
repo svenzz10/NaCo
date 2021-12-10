@@ -117,7 +117,7 @@ def mutationVariant1(population, chanceToFlip):
             chromosomeToFlip = random.randint(0, len(individual)-1)
             individual[chromosomeToFlip] = not individual[chromosomeToFlip]
     
-            
+    
 def main():
     # Set a random seed in order to get reproducible results
     random.seed(42)
@@ -128,15 +128,19 @@ def main():
     # Get a problem from the IOHexperimenter environment
     problem: ioh.problem.Integer = ioh.get_problem(2, 1, 100, "Integer")
 
-    # Run the algoritm on the problem
-    algorithm(problem)
+    # # Run the algoritm on the problem
+    # algorithm(problem)
 
-    # Inspect the results
-    print("Best solution found:")
-    print("".join(map(str, problem.state.current_best.x)))
-    print("With an objective value of:", problem.state.current_best.y)
-    print()
-    print("after", problem.state.evaluations)
+    # # Inspect the results
+    # print("Best solution found:")
+    # print("".join(map(str, problem.state.current_best.x)))
+    # print("With an objective value of:", problem.state.current_best.y)
+    # print()
+    # print("after", problem.state.evaluations)
+    bitstring = bin(126)
+    lastPart = bitstring[2:len(bitstring)]
+    print(lastPart)
+    
 
 
 if __name__ == '__main__':
