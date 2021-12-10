@@ -3,15 +3,16 @@ import ioh
 
 from implementation import RandomSearch
 
+def ternary (n):
+    if n == 0:
+        return '0'
+    nums = []
+    while n:
+        n, r = divmod(n, 3)
+        nums.append(str(r))
+    return ''.join(reversed(nums))
+
 class CellularAutomata:
-    def ternary (n):
-        if n == 0:
-            return '0'
-        nums = []
-        while n:
-            n, r = divmod(n, 3)
-            nums.append(str(r))
-        return ''.join(reversed(nums))
     
     def __init__(self, rule_number: int):
         self.k = 2
@@ -19,7 +20,7 @@ class CellularAutomata:
         lastPart = bitString[2:len(bitString)]
         if rule_number > 500:
             self.k = 3
-            lastPart = self.ternary(rule_number)
+            lastPart = ternary(rule_number)
         self.rule = lastPart
 
     def __call__(self, c0: typing.List[int], t: int) -> typing.List[int]:
@@ -142,10 +143,10 @@ if __name__ == '__main__':
             newInput.append(T)
             newInput.append(CTArray)
             inputArray.append(newInput)
-    cellularAutomata = CellularAutomata(inputArray[0][1])
-    print(inputArray[1][3])
-    print(cellularAutomata(inputArray[1][3], inputArray[0][2]))
-    print(bin(inputArray[0][1]))
+    cellularAutomata = CellularAutomata(inputArray[5][1])
+    print(inputArray[5][3])
+    print(cellularAutomata(inputArray[5][3], inputArray[5][2]))
+    print(ternary(inputArray[5][1]))
     
     
     
