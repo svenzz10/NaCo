@@ -23,6 +23,8 @@ test script to properly evaluate your algoritm.
 from math import perm
 import ioh
 import random
+import matplotlib.pyplot as plt
+import numpy as np
 from algorithm import Algorithm
 from objective_function import *
 
@@ -57,7 +59,7 @@ class GeneticAlgorithm(Algorithm):
         for iteration in range(self.max_iterations):
             bestOfPopulation = selectionVariant2(population, problem, toBeSelected)
             nextGen = recombinationVariant1(id, bestOfPopulation, problem, populationSize)
-            mutationVariant1(id, nextGen, chanceToFlip)
+            mutationVariant2(id, nextGen, chanceToFlip)
             population = nextGen
             
     
@@ -113,7 +115,26 @@ def recombinationVariant1(id, bestOfPopulation, problem, populationSize):
         #adding child
         nextGen.append(child)
     return nextGen
-        
+
+def recombinationVariant2(id, bestOfPopulation, problem, populationSize):
+    nextGen = []
+
+    #define middle
+    half_crossover = len(bestOfPopulation) // 2
+
+    #select first and second arrays
+    first_half = bestOfPopulation[:half_crossover]
+    second_half = bestOfPopulation[half_crossover:]
+
+    #add them together but vice versa
+    for bit in second_half:
+        nextGen.append(bit)
+    for bit in first_half:
+        nextGen.append(bit)
+
+    return nextGen
+    
+#flip a random bit based on chance
 def mutationVariant1(id, population, chanceToFlip):
     for individual in population:
         chance = random.randint(0, chanceToFlip-1)
@@ -127,14 +148,49 @@ def mutationVariant1(id, population, chanceToFlip):
                 elif (individual[chromosomeToFlip] == 1): individual[chromosomeToFlip] = 2
                 elif (individual[chromosomeToFlip] == 2): individual[chromosomeToFlip] = 0
 
-    
+#always flip a random bit
+def mutationVariant2(id, population, chanceToFlip):
+    for individual in population:
+        if (id == 2):
+            chromosomeToFlip = random.randint(0, len(individual)-1)
+            individual[chromosomeToFlip] = not individual[chromosomeToFlip]
+        else:
+            chromosomeToFlip = random.randint(0, len(individual)-1)
+            if (individual[chromosomeToFlip] == 0): individual[chromosomeToFlip] = 1
+            elif (individual[chromosomeToFlip] == 1): individual[chromosomeToFlip] = 2
+            elif (individual[chromosomeToFlip] == 2): individual[chromosomeToFlip] = 0
+
+def plotData():
+    #Change data files based on what you want to plot
+    data = np.loadtxt("./data_objectiveFunc1_id2_recombination1.txt", delimiter=' ', usecols=(0,1))
+    evaluations = data[:, 0]
+    objective_value = data[:,1]
+
+    data = np.loadtxt("./data_objectiveFunc1_id2_mutationVariant2.txt", delimiter=' ', usecols=(0,1))
+    evaluations2 = data[:, 0]
+    objective_value2 = data[:,1]
+
+    #change titles based on what you want to plot
+    fig,(ax,ax2) = plt.subplots(1,2)
+
+    ax.plot(evaluations,objective_value)
+    ax.set_title('Mutation Variant 1')
+    ax.set_xlabel('Evaluations')
+    ax.set_ylabel('Objective value')
+
+    ax2.plot(evaluations2,objective_value2)
+    ax2.set_title('Mutation Variant 2')
+    ax2.set_xlabel('Evaluations')
+
+    #save figure to png
+    plt.savefig('GA_with_id2_mutationVariants.png')
     
 def main():
     # Set a random seed in order to get reproducible results
-    random.seed(42)
-
+    random.seed(40)
+    plotData()
     #change id to determine (2 for 0,1) and (3 for 0,1,2)
-    id = 2
+    id = 3
     algorithm = GeneticAlgorithm()
 
     # Wrap objective_function as an ioh problem
