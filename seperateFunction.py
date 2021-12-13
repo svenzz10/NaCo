@@ -68,7 +68,7 @@ def objective_function(c0_prime: typing.List[int]) -> float:
     which computes a similarity measure between c0_prime a suggested by your
     GA, with the true c0 state for the ct state given in the sup. material. '''
     
-    ct, rule, t = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 30, 1
+    ct, rule, t = [0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], 34, 5
 
     ca = CellularAutomata(rule)
     ct_prime = ca(c0_prime, t)
@@ -89,7 +89,7 @@ def objective_function2(c0_prime: typing.List[int]) -> float:
     which computes a similarity measure between c0_prime a suggested by your
     GA, with the true c0 state for the ct state given in the sup. material. '''
     
-    ct, rule, t = None, None, None # Given by the sup. material 
+    ct, rule, t = [0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], 34, 5
 
     ca = CellularAutomata(rule)
     ct_prime = ca(c0_prime, t)

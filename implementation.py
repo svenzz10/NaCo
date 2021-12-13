@@ -24,7 +24,7 @@ from math import perm
 import ioh
 import random
 from algorithm import Algorithm
-from seperateFunction import objective_function
+from seperateFunction import objective_function, objective_function2
 
 class RandomSearch(Algorithm):
     '''An example of Random Search.'''
@@ -55,6 +55,7 @@ class GeneticAlgorithm(Algorithm):
             else:
                 population.append([random.randint(0, 2) for _ in range(problem.meta_data.n_variables)])
         for iteration in range(self.max_iterations):
+            print(iteration)
             bestOfPopulation = selectionVariant2(population, problem, toBeSelected)
             nextGen = recombinationVariant1(id, bestOfPopulation, problem, populationSize)
             mutationVariant1(id, nextGen, chanceToFlip)
@@ -86,6 +87,7 @@ def selectionVariant1(currentGen, problem, toBeSelected):
 #Simply select the best (risk local maximum)
 def selectionVariant2(currentGen, problem, toBeSelected):
     currentGen.sort(key=objective_function, reverse=True)
+    print(objective_function(currentGen[0]))
     nextGen = []
     for i in range(toBeSelected):
         nextGen.append(currentGen[i])
