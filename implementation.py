@@ -24,7 +24,7 @@ from math import perm
 import ioh
 import random
 from algorithm import Algorithm
-from seperateFunction import objective_function, objective_function2
+from objective_function import *
 
 class RandomSearch(Algorithm):
     '''An example of Random Search.'''
@@ -133,22 +133,27 @@ def main():
     # Set a random seed in order to get reproducible results
     random.seed(42)
 
-    # Instantiate the algoritm, you should replace this with your GA implementation 
+    #change id to determine (2 for 0,1) and (3 for 0,1,2)
+    id = 2
     algorithm = GeneticAlgorithm()
 
-    # Get a problem from the IOHexperimenter environment
-    problem: ioh.problem.Integer = ioh.get_problem(2, 1, 100, "Integer")
+    # Wrap objective_function as an ioh problem
+    ioh.problem.wrap_integer_problem(
+            objective_function,
+            "objective_function_ca_1",
+            ioh.OptimizationType.Maximization,
+            0,
+            1
+    )
+    problem = ioh.get_problem("objective_function_ca_1", dimension=60, problem_type='Integer')
+    # Attach a logger to the problem
+    logger = ioh.logger.Analyzer(store_positions=True)
+    problem.attach_logger(logger)
 
-
-    # Run the algoritm on the problem
-    algorithm(3,problem)
-
-    # Inspect the results
-    print("Best solution found:")
-    print("".join(map(str, problem.state.current_best.x)))
-    print("With an objective value of:", problem.state.current_best.y)
-    print()
-    print("after", problem.state.evaluations)
+    # run your algoritm on the problem
+    algorithm(id, problem)
+    
+    print(problem.state)
 
 
 if __name__ == '__main__':
