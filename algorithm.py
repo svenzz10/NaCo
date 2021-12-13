@@ -35,7 +35,7 @@ class Algorithm(abc.ABC):
 
 
     @abc.abstractmethod
-    def __call__(self, problem: ioh.problem.Integer) -> None:
+    def __call__(self ,problem: ioh.problem.Integer) -> None:
         pass
 
 
