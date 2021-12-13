@@ -24,6 +24,7 @@ from math import perm
 import ioh
 import random
 from algorithm import Algorithm
+from seperateFunction import objective_function
 
 class RandomSearch(Algorithm):
     '''An example of Random Search.'''
@@ -46,7 +47,6 @@ class GeneticAlgorithm(Algorithm):
     def __call__(self, id, problem: ioh.problem.Integer) -> None: 
         #parameters for algorithms
         toBeSelected, populationSize, chanceToFlip = 8, 20, 4
-        print(id)
     
         population = []
         for x in range(populationSize):
@@ -70,7 +70,7 @@ def selectionVariant1(currentGen, problem, toBeSelected):
     fitnessArray = []
     for individual in currentGen:
         fitnessArray.append(totalFitness)
-        totalFitness += problem(individual)
+        totalFitness += objective_function(individual)
         
     #selects individuasls based on scores
     for _ in range(toBeSelected):
@@ -85,7 +85,7 @@ def selectionVariant1(currentGen, problem, toBeSelected):
     
 #Simply select the best (risk local maximum)
 def selectionVariant2(currentGen, problem, toBeSelected):
-    currentGen.sort(key=problem, reverse=True)
+    currentGen.sort(key=objective_function, reverse=True)
     nextGen = []
     for i in range(toBeSelected):
         nextGen.append(currentGen[i])
