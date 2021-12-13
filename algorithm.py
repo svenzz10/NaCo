@@ -8,7 +8,7 @@ class Algorithm(abc.ABC):
     '''This class should be used as a base class (interface) for your implementation as Genetic Algorithm.     
     '''
     
-    def __init__(self, max_iterations:int = 2000):
+    def __init__(self, max_iterations:int = 100):
         self.max_iterations: int = max_iterations
     
     def __init_subclass__(cls, *args, **kwargs): 
@@ -35,7 +35,7 @@ class Algorithm(abc.ABC):
 
 
     @abc.abstractmethod
-    def __call__(self, problem: ioh.problem.Integer) -> None:
+    def __call__(self, id ,problem: ioh.problem.Integer) -> None:
         pass
 
 
