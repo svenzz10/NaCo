@@ -74,8 +74,8 @@ def objective_function(c0_prime: typing.List[int]) -> float:
     ct_prime = ca(c0_prime, t)
 
     positives, negatives = 0, 0
-    for bit in range(0, len(str(ct))):
-        if (str(ct)[bit] == str(ct_prime)[bit]):
+    for bit in range(len(ct)):
+        if (ct[bit] == ct_prime[bit]):
             positives += 1
         else:
             negatives += 1
@@ -96,12 +96,10 @@ def objective_function2(c0_prime: typing.List[int]) -> float:
 
     #this objective function also takes in account how close both bits are
     #1-2 is closer than 0-2
-    c0Str = str(ct)
-    ctStr = str(ct_prime)
-    length = len(c0Str)
+    length = len(ct)
     totalDiff = 0
-    for bit in range(0, length):
-        totalDiff += (2-abs(int(c0Str[bit])-int(ctStr[bit])))*0.5
+    for bit in range(length):
+        totalDiff += (2-abs(int(ct[bit])-int(ct_prime[bit])))*0.5
 
     #return similarity percentage
     return totalDiff / length * 100

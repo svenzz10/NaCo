@@ -70,7 +70,7 @@ def selectionVariant1(currentGen, problem, toBeSelected):
     fitnessArray = []
     for individual in currentGen:
         fitnessArray.append(totalFitness)
-        totalFitness += objective_function(individual)
+        totalFitness += objective_function2(individual)
         
     #selects individuasls based on scores
     for _ in range(toBeSelected):
@@ -85,7 +85,8 @@ def selectionVariant1(currentGen, problem, toBeSelected):
     
 #Simply select the best (risk local maximum)
 def selectionVariant2(currentGen, problem, toBeSelected):
-    currentGen.sort(key=objective_function, reverse=True)
+    currentGen.sort(key=objective_function2, reverse=True)
+    print(objective_function(currentGen[0]))
     nextGen = []
     for i in range(toBeSelected):
         nextGen.append(currentGen[i])

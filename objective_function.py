@@ -14,21 +14,21 @@ def analyzeProblem():
 
     # Wrap objective_function as an ioh problem
     ioh.problem.wrap_integer_problem(
-            objective_function,
+            objective_function2,
             "objective_function_ca_1",
             ioh.OptimizationType.Maximization,
             0,
             1
     )
     problem = ioh.get_problem("objective_function_ca_1", dimension=60, problem_type='Integer')
-    
+    print(type(problem))
     # Attach a logger to the problem
     logger = ioh.logger.Analyzer(store_positions=True)
     problem.attach_logger(logger)
 
     # run your algoritm on the problem
     algorithm(id, problem)
-    print(problem.state)
+    print(problem.state.current_best.x)
 
 
 
